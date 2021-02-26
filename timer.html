@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chun's Pomodoro Timer</title>
+</head>
+<body>
+    
+    <main>
+        <section>
+            <h1>Work Timer (25mins)</h1>
+            <p><span class='work-timer'>00:00</span></p>
+            <button class='start-work'>start</button>
+            <button class='cancel-work'>cancel</button>
+        </section>
+        <section>
+            <h1>Break Timer (5mins)</h1>
+            <p><span class='break-timer'>00:00</span></p>
+            <button class='start-break'>start</button>
+            <button class='cancel-break'>cancel</button>
+        </section>
+    </main>
+
+<script>
+const startBtn = document.querySelector('.start-work, .start-break');
+const cancelBtn = document.querySelector('.cancel-work, .cancel-break');
+const timer = document.querySelector('.work-timer, .break-timer');
+let intervalId;
+
+//Work timer
+const workStartingMins = 25;
+let time = workStartingMins * 60;
+
+// timer.textContent = workStartingMins + ':00'
+
+function startCountdown() {
+    intervalId = setInterval(timerFunc, 1000);
+}
+        
+function timerFunc() {
+    let minutes = Math.floor(time / 60)
+    let seconds = time % 60
+    if(minutes < 0 && seconds < 0) {
+        return;
+        //play sound
+    } else {
+        time--
+    }
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    timer.textContent = `${minutes}:${seconds}`
+}
+        
+function startOrPause() {
+	if(!intervalId) { //if not currently counting down
+		intervalId = setInterval(timerFunc, 1000); //start timer
+		startBtn.textContent = 'pause'; //change btn to pause
+	} else {
+		clearInterval(intervalId);
+		intervalId = null; //like how on line 111 it is setInterval. Also works with intervalId = false. 
+		startBtn.textContent = 'start';
+	}
+}
+startBtn.addEventListener('click', startOrPause);
+
+cancelBtn.addEventListener('click', cancelTimer)
+
+function cancelTimer() {
+    //alert pops up saying are you sure you want to stop this session?
+    let alert = confirm('Are you sure you want to stop this session?')
+    //if ok is pressed, timer shows 25:00
+    if(alert) {
+        console.log('ok pressed')
+        workTimer.textContent = workStartingMins + ':00'
+    }
+}
+
+
+
+
+</script>
+<style>
+* {
+  font-family: Epilogue;
+  font-size: 1.3rem;
+}
+
+
+</style>
+</body>
+
+</html>
