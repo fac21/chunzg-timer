@@ -8,7 +8,7 @@
 </head>
 <body>
     
-    <main>
+    <main class='center stack'>
         <section>
             <h1>Work Timer (25mins)</h1>
             <p><span class='work-timer'>00:00</span></p>
@@ -24,67 +24,136 @@
     </main>
 
 <script>
-const startBtn = document.querySelector('.start-work, .start-break');
-const cancelBtn = document.querySelector('.cancel-work, .cancel-break');
-const timer = document.querySelector('.work-timer, .break-timer');
+const startWBtn = document.querySelector('.start-work');
+const cancelWBtn = document.querySelector('.cancel-work');
+const wTimer = document.querySelector('.work-timer');
 let intervalId;
 
 //Work timer
-const workStartingMins = 25;
-let time = workStartingMins * 60;
-
-// timer.textContent = workStartingMins + ':00'
+const wStartingMins = 25;
+let wTime = wStartingMins * 60;
 
 function startCountdown() {
     intervalId = setInterval(timerFunc, 1000);
 }
         
 function timerFunc() {
-    let minutes = Math.floor(time / 60)
-    let seconds = time % 60
+    let minutes = Math.floor(wTime / 60)
+    let seconds = wTime % 60
     if(minutes < 0 && seconds < 0) {
         return;
         //play sound
     } else {
-        time--
+        wTime--
     }
     minutes = minutes < 10 ? '0' + minutes : minutes;
     seconds = seconds < 10 ? '0' + seconds : seconds;
-    timer.textContent = `${minutes}:${seconds}`
+    wTimer.textContent = `${minutes}:${seconds}`
 }
         
-function startOrPause() {
+function wStartOrPause() {
 	if(!intervalId) { //if not currently counting down
 		intervalId = setInterval(timerFunc, 1000); //start timer
-		startBtn.textContent = 'pause'; //change btn to pause
+        startWBtn.textContent = 'pause'; //change btn to pause
 	} else {
 		clearInterval(intervalId);
-		intervalId = null; //like how on line 111 it is setInterval. Also works with intervalId = false. 
-		startBtn.textContent = 'start';
+		intervalId = null; 
+		startWBtn.textContent = 'start';
 	}
 }
-startBtn.addEventListener('click', startOrPause);
+startWBtn.addEventListener('click', wStartOrPause);
 
-cancelBtn.addEventListener('click', cancelTimer)
+cancelWBtn.addEventListener('click', wCancelTimer)
 
-function cancelTimer() {
-    //alert pops up saying are you sure you want to stop this session?
+function wCancelTimer() {
     let alert = confirm('Are you sure you want to stop this session?')
-    //if ok is pressed, timer shows 25:00
     if(alert) {
         console.log('ok pressed')
-        workTimer.textContent = workStartingMins + ':00'
+        wTimer.textContent = wStartingMins + ':00'
     }
 }
 
+const startBBtn = document.querySelector('.start-break');
+const cancelBBtn = document.querySelector('.cancel-break');
+const bTimer = document.querySelector('.break-timer');
+let intervalId2;
 
+//Break timer
+const bStartingMins = 5;
+let bTime = bStartingMins * 60;
+
+function startCountdown2() {
+    intervalId2 = setInterval(timerFunc, 1000);
+}
+        
+function timerFunc2() {
+    let minutes = Math.floor(bTime / 60)
+    let seconds = bTime % 60
+    if(minutes < 0 && seconds < 0) {
+        return;
+        //play sound
+    } else {
+        bTime--
+    }
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    bTimer.textContent = `${minutes}:${seconds}`
+}
+        
+function bStartOrPause() {
+	if(!intervalId2) { //if not currently counting down
+		intervalId2 = setInterval(timerFunc2, 1000); //start timer
+        startBBtn.textContent = 'pause'; //change btn to pause
+	} else {
+		clearInterval(intervalId2);
+		intervalId2 = null; 
+		startBBtn.textContent = 'start';
+	}
+}
+startBBtn.addEventListener('click', bStartOrPause);
+
+cancelBBtn.addEventListener('click', bCancelTimer)
+
+function bCancelTimer() {
+    let alert = confirm('Are you sure you want to stop this session?')
+    if(alert) {
+        console.log('ok pressed')
+        bTimer.textContent = bStartingMins + ':00'
+    }
+}
 
 
 </script>
 <style>
 * {
-  font-family: Epilogue;
-  font-size: 1.3rem;
+    font-family: Epilogue;
+    font-size: 1.3rem;
+    color: rgb(152, 0, 66)
+}
+html {
+    background-color: lemonchiffon
+}
+.center {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 30rem;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.1rem;
+    text-align: center;
+}
+.stack > * {
+    margin-top: 5rem;
+}
+button {
+    background-color: rgb(152, 0, 66); 
+    border: none;
+    border-radius: 1.5rem;
+    color: white;
+    padding: .8rem 2rem;
+    text-align: center;
+    font-size: .8rem;
 }
 
 
