@@ -9,25 +9,41 @@
 <body>
     
     <main class='center stack'>
-        <section>
-            <h1>Work Timer (25mins)</h1>
-            <p><span class='work-timer'>00:00</span></p>
-            <button class='start-work'>start</button>
-            <button class='cancel-work'>cancel</button>
+        <button class='timer-button'></button>
+        <section class='one'>
+            <h1>Work</h1>
+            <h2>25 mins</h2>
+            <p><span class='work-timer'>Ready?</span></p>
+            <p class='stack-sm'>
+                <button class='start-work'>start</button>
+                <button class='cancel-work'>cancel</button>
+            </p>
         </section>
-        <section>
-            <h1>Break Timer (5mins)</h1>
-            <p><span class='break-timer'>00:00</span></p>
-            <button class='start-break'>start</button>
-            <button class='cancel-break'>cancel</button>
+        <section class='two'>
+            <h1>Break</h1>
+            <h2>5 mins</h2>
+            <p><span class='break-timer'>Relax</span></p>
+            <p class='stack-sm'>
+                <button class='start-break'>start</button>
+                <button class='cancel-break'>cancel</button>
+            </p>
         </section>
     </main>
+    <audio id='audio' src='http://www.soundjay.com/button/beep-07.wav' autoplay='false'></audio>
 
 <script>
 const startWBtn = document.querySelector('.start-work');
 const cancelWBtn = document.querySelector('.cancel-work');
 const wTimer = document.querySelector('.work-timer');
+const startBBtn = document.querySelector('.start-break');
+const cancelBBtn = document.querySelector('.cancel-break');
+const bTimer = document.querySelector('.break-timer');
+const sound = document.querySelector('#audio');
+// let showBtn = document.querySelector('.timer-button');
+const sectionTwo = document.querySelector('.two');
+const sectionOne = document.querySelector('.one');
 let intervalId;
+let intervalId2;
 
 //Work timer
 const wStartingMins = 25;
@@ -36,21 +52,25 @@ let wTime = wStartingMins * 60;
 function startCountdown() {
     intervalId = setInterval(timerFunc, 1000);
 }
+
+const playSound = () => {
+    sound.play()
+}
         
 function timerFunc() {
-    let minutes = Math.floor(wTime / 60)
-    let seconds = wTime % 60
+    let minutes = Math.floor(wTime / 60) //total seconds divided by 60
+    let seconds = wTime % 60 //total seconds mod 60 (remainder of minutes)
     if(minutes < 0 && seconds < 0) {
+        playSound();
         return;
-        //play sound
     } else {
         wTime--
     }
     minutes = minutes < 10 ? '0' + minutes : minutes;
     seconds = seconds < 10 ? '0' + seconds : seconds;
-    wTimer.textContent = `${minutes}:${seconds}`
+    wTimer.textContent = `${minutes}:${seconds}`;
 }
-        
+
 function wStartOrPause() {
 	if(!intervalId) { //if not currently counting down
 		intervalId = setInterval(timerFunc, 1000); //start timer
@@ -63,35 +83,35 @@ function wStartOrPause() {
 }
 startWBtn.addEventListener('click', wStartOrPause);
 
-cancelWBtn.addEventListener('click', wCancelTimer)
-
 function wCancelTimer() {
     let alert = confirm('Are you sure you want to stop this session?')
     if(alert) {
-        console.log('ok pressed')
         wTimer.textContent = wStartingMins + ':00'
+        wTime = wStartingMins * 60; //puts the starting time back to 25;
+        clearInterval(intervalId); //cancels the timer
+        intervalId = null; //this fixes the having to click on start twice
+        startWBtn.textContent = 'start';
+    } else {
+        intervalId = setInterval(timerFunc, 1000); 
+        startWBtn.textContent = 'pause'; 
     }
 }
-
-const startBBtn = document.querySelector('.start-break');
-const cancelBBtn = document.querySelector('.cancel-break');
-const bTimer = document.querySelector('.break-timer');
-let intervalId2;
+cancelWBtn.addEventListener('click', wCancelTimer)
 
 //Break timer
 const bStartingMins = 5;
 let bTime = bStartingMins * 60;
 
 function startCountdown2() {
-    intervalId2 = setInterval(timerFunc, 1000);
+    intervalId2 = setInterval(timerFunc2, 1000);
 }
         
 function timerFunc2() {
     let minutes = Math.floor(bTime / 60)
     let seconds = bTime % 60
     if(minutes < 0 && seconds < 0) {
+        playSound();
         return;
-        //play sound
     } else {
         bTime--
     }
@@ -99,10 +119,10 @@ function timerFunc2() {
     seconds = seconds < 10 ? '0' + seconds : seconds;
     bTimer.textContent = `${minutes}:${seconds}`
 }
-        
+
 function bStartOrPause() {
 	if(!intervalId2) { //if not currently counting down
-		intervalId2 = setInterval(timerFunc2, 1000); //start timer
+		intervalId2 = setInterval(timerFunc2, 1000);
         startBBtn.textContent = 'pause'; //change btn to pause
 	} else {
 		clearInterval(intervalId2);
@@ -112,30 +132,50 @@ function bStartOrPause() {
 }
 startBBtn.addEventListener('click', bStartOrPause);
 
-cancelBBtn.addEventListener('click', bCancelTimer)
-
 function bCancelTimer() {
-    let alert = confirm('Are you sure you want to stop this session?')
+    const alert = confirm('Are you sure you want to stop this session?')
     if(alert) {
-        console.log('ok pressed')
+        clearInterval(intervalId2);
+        startBBtn.textContent = 'start';
         bTimer.textContent = bStartingMins + ':00'
     }
 }
+cancelBBtn.addEventListener('click', bCancelTimer);
 
+let showBtn = document.querySelector('.timer-button');
+showBtn.textContent = 'Break Timer'
+function showTimer() {
+    if(showBtn.textContent = 'Break Timer') {
+        console.log('pressed 1')
+        sectionTwo.style.display = 'block';
+        sectionOne.style.display = 'none';
+        showBtn.textContent = 'Work Timer';
+    } else if(showBtn.textContent = 'Work Timer') {
+        console.log('pressed 2')
+        sectionTwo.style.display = 'none';
+        sectionOne.style.display = 'block';
+        showBtn.textContent = 'Break Timer';
+    }
+}
+showBtn.addEventListener('click', showTimer);
 
 </script>
 <style>
 * {
     font-family: Epilogue;
     font-size: 1.3rem;
-    color: rgb(152, 0, 66)
+    /* color: rgb(152, 0, 66); */
+    color: rgb(249, 64, 32);
 }
 html {
-    background-color: lemonchiffon
+    background: rgb(249, 64, 32);
+}
+.two {
+    display: none;
 }
 .center {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     max-width: 30rem;
     margin: auto;
     align-items: center;
@@ -146,14 +186,35 @@ html {
 .stack > * {
     margin-top: 5rem;
 }
+.stack-sm > * {
+    margin-top: 1rem;
+}
+h1 {
+    font-size: 2rem;
+}
+h2 {
+    font-size: 1rem;
+}
 button {
-    background-color: rgb(152, 0, 66); 
+    background-color: rgb(249, 64, 32);
     border: none;
     border-radius: 1.5rem;
     color: white;
     padding: .8rem 2rem;
     text-align: center;
     font-size: .8rem;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+button:hover {
+    cursor: pointer;
+}
+span {
+    font-size: 4rem;
+}
+section {
+    background: honeydew;
+    padding: 5rem;
+    border-radius: 50%;
 }
 
 
