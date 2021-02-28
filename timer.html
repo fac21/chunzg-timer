@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Chun's Pomodoro Timer</title>
 </head>
 <body>
@@ -12,8 +12,11 @@
         <button class='timer-button'></button>
         <section class='one'>
             <h1>Work</h1>
-            <h2>25 mins</h2>
-            <p><span class='work-timer'>Ready?</span></p>
+            <p><span class='work-timer'>00:00</span></p>
+            <form>
+                <label for='length'>How long do you want to work for?</label>
+                <input type='number' value='25' id='length'>
+            </form>
             <p class='stack-sm'>
                 <button class='start-work'>start</button>
                 <button class='cancel-work'>cancel</button>
@@ -22,7 +25,7 @@
         <section class='two'>
             <h1>Break</h1>
             <h2>5 mins</h2>
-            <p><span class='break-timer'>Relax</span></p>
+            <p><span class='break-timer'>00:00</span></p>
             <p class='stack-sm'>
                 <button class='start-break'>start</button>
                 <button class='cancel-break'>cancel</button>
@@ -38,16 +41,23 @@ const wTimer = document.querySelector('.work-timer');
 const startBBtn = document.querySelector('.start-break');
 const cancelBBtn = document.querySelector('.cancel-break');
 const bTimer = document.querySelector('.break-timer');
-const sound = document.querySelector('#audio');
-// let showBtn = document.querySelector('.timer-button');
+const showBtn = document.querySelector('.timer-button');
 const sectionTwo = document.querySelector('.two');
 const sectionOne = document.querySelector('.one');
+const sound = document.querySelector('#audio');
 let intervalId;
 let intervalId2;
 
 //Work timer
-const wStartingMins = 25;
-let wTime = wStartingMins * 60;
+let wTime;
+let updatedTime;
+
+//Custom timer lengths
+function getCustomTime() {
+    let val = document.querySelector('#length').value;
+    let wStartingMins = val;
+    wTime = wStartingMins * 60;
+}
 
 function startCountdown() {
     intervalId = setInterval(timerFunc, 1000);
@@ -58,17 +68,27 @@ const playSound = () => {
 }
         
 function timerFunc() {
-    let minutes = Math.floor(wTime / 60) //total seconds divided by 60
-    let seconds = wTime % 60 //total seconds mod 60 (remainder of minutes)
-    if(minutes < 0 && seconds < 0) {
-        playSound();
-        return;
+    if(updatedTime === wTime) {
+        getCustomTime()
+        let minutes = Math.floor(wTime / 60) //total seconds divided by 60
+        let seconds = wTime % 60
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        wTimer.textContent = `${minutes}:${seconds}`;
+        wTime--;
     } else {
-        wTime--
+        let minutes = Math.floor(wTime / 60) //total seconds divided by 60
+        let seconds = wTime % 60 //total seconds mod 60 (remainder of minutes)
+        if(minutes < 0 && seconds < 0) {
+            playSound();
+            return;
+        } else {
+            wTime--
+        }
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        wTimer.textContent = `${minutes}:${seconds}`;
     }
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
-    wTimer.textContent = `${minutes}:${seconds}`;
 }
 
 function wStartOrPause() {
@@ -86,20 +106,22 @@ startWBtn.addEventListener('click', wStartOrPause);
 function wCancelTimer() {
     let alert = confirm('Are you sure you want to stop this session?')
     if(alert) {
-        wTimer.textContent = wStartingMins + ':00'
-        wTime = wStartingMins * 60; //puts the starting time back to 25;
+        wTimer.textContent = '00:00'
+        getCustomTime()
         clearInterval(intervalId); //cancels the timer
         intervalId = null; //this fixes the having to click on start twice
         startWBtn.textContent = 'start';
+    } else if(!alert && startWBtn.textContent === 'start') {
+        intervalId = setInterval(timerFunc, 1000);
+        startWBtn.textContent = 'pause'; 
     } else {
-        intervalId = setInterval(timerFunc, 1000); 
         startWBtn.textContent = 'pause'; 
     }
 }
 cancelWBtn.addEventListener('click', wCancelTimer)
 
 //Break timer
-const bStartingMins = 5;
+let bStartingMins = 5;
 let bTime = bStartingMins * 60;
 
 function startCountdown2() {
@@ -142,17 +164,15 @@ function bCancelTimer() {
 }
 cancelBBtn.addEventListener('click', bCancelTimer);
 
-let showBtn = document.querySelector('.timer-button');
-showBtn.textContent = 'Break Timer'
+showBtn.textContent = 'Break Timer' //has to be assignment operator here
+
 function showTimer() {
-    if(showBtn.textContent = 'Break Timer') {
-        console.log('pressed 1')
+    if(showBtn.textContent === 'Break Timer') { //has to be comparison operator here
         sectionTwo.style.display = 'block';
         sectionOne.style.display = 'none';
-        showBtn.textContent = 'Work Timer';
-    } else if(showBtn.textContent = 'Work Timer') {
-        console.log('pressed 2')
-        sectionTwo.style.display = 'none';
+        showBtn.textContent = 'Work Timer'; //has to be assignment operator here
+    } else if(showBtn.textContent === 'Work Timer') {
+        sectionTwo.style.display = 'none'; 
         sectionOne.style.display = 'block';
         showBtn.textContent = 'Break Timer';
     }
