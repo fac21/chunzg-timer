@@ -113,13 +113,14 @@ cancelWBtn.addEventListener('click', wCancelTimer)
 
 //Break timer
 let bTime;
+let bStartingMins;
 let updatedTime2;
 let prevVal;
 
 //Custom timer lengths
-function getCustomTime2() {
+const getCustomTime2 = () => {
     let val2 = document.querySelector('#length2').value;
-    let bStartingMins = val2; //5 
+    bStartingMins = val2; //eg 5 
     bTime = bStartingMins * 60;
 }
         
@@ -152,28 +153,33 @@ function timerFunc2() {
 //timeChanged function will always be true. And then this allows us to carry on
 //with an if statement condition to get the getCustomTime2 function to look
 //again at the input value which by that time is the latest one. 
-function timeChanged() {
+const timeChanged = () => {
     return document.querySelector('#length2').value !== updatedTime2;
 }
 
-function bStartOrPause() {
-    // if(prevVal === updatedTime2) { //If typed input has changed since last input 
+const bStartPause = () => {
+    if(!intervalId2) { //if not currently counting down
+        intervalId2 = setInterval(timerFunc2, 1000);
+        startBBtn.textContent = 'pause'; 
+    } else {
+        clearInterval(intervalId2);
+        intervalId2 = null; 
+        startBBtn.textContent = 'start';
+    }
+}
+
+function bTriggerTimer() {
+    if(bTime === bStartingMins * 60) { //If typed input has changed since last input 
         if(timeChanged() === true) {  //this part causes the normal start pause functino to not work. 
             getCustomTime2();
             console.log('get latest value')
         }
-    // } else { //if typed input has not been changed since last input
-        if(!intervalId2) { //if not currently counting down
-            intervalId2 = setInterval(timerFunc2, 1000);
-            startBBtn.textContent = 'pause'; 
-        } else {
-            clearInterval(intervalId2);
-            intervalId2 = null; 
-            startBBtn.textContent = 'start';
-        }
-    // }
+        bStartPause();
+    } else if(bTime !== bStartingMins * 60) { //if typed input has not been changed since last input
+        bStartPause();
+    }
 }
-startBBtn.addEventListener('click', bStartOrPause);
+startBBtn.addEventListener('click', bTriggerTimer);
 
 function bCancelTimer() {
     let alert2 = confirm('Are you sure you want to stop this session?')
@@ -195,7 +201,6 @@ function bCancelTimer() {
 cancelBBtn.addEventListener('click', bCancelTimer)
 
 showBtn.textContent = 'Break Timer' //has to be assignment operator here
-
 function showTimer() {
     if(showBtn.textContent === 'Break Timer') { //has to be comparison operator here
         sectionTwo.style.display = 'block';
