@@ -61,14 +61,6 @@ function getCustomTime() {
     let wStartingMins = val;
     wTime = wStartingMins * 60;
 }
-
-function startCountdown() {
-    intervalId = setInterval(timerFunc, 1000);
-}
-
-const playSound = () => {
-    sound.play()
-}
         
 function timerFunc() {
     if(updatedTime === wTime) {
@@ -83,7 +75,7 @@ function timerFunc() {
         let minutes = Math.floor(wTime / 60) //total seconds divided by 60
         let seconds = wTime % 60 //total seconds mod 60 (remainder of minutes)
         if(minutes < 0 && seconds < 0) {
-            playSound();
+            sound.play();
             return;
         } else {
             wTime--
@@ -112,7 +104,7 @@ function wCancelTimer() {
         location.reload()
     } else if(!alert && startWBtn.textContent === 'start') {
         intervalId = setInterval(timerFunc, 1000);
-        startWBtn.textContent = 'pause'; 
+        startWBtn.textContent = 'pause';
     } else {
         startWBtn.textContent = 'pause'; 
     }
@@ -122,13 +114,13 @@ cancelWBtn.addEventListener('click', wCancelTimer)
 //Break timer
 let bTime;
 let updatedTime2;
+let prevVal;
 
 //Custom timer lengths
 function getCustomTime2() {
     let val2 = document.querySelector('#length2').value;
     let bStartingMins = val2;
     bTime = bStartingMins * 60;
-    console.log(val2, 'getCustomTime2 called')
 }
         
 function timerFunc2() {
@@ -144,7 +136,7 @@ function timerFunc2() {
         let minutes = Math.floor(bTime / 60) //total seconds divided by 60
         let seconds = bTime % 60 //total seconds mod 60 (remainder of minutes)
         if(minutes < 0 && seconds < 0) {
-            playSound();
+            sound.play();
             return;
         } else {
             bTime--
@@ -155,31 +147,33 @@ function timerFunc2() {
     }
 }
 
+//Below: the updatedTime2 variable logs as undefined so this is just a way to
+//compare it to the input value, and as they will always be not equal, the
+//timeChanged function will always be true. And then this allows us to carry on
+//with an if statement condition to get the getCustomTime2 function to look
+//again at the input value which by that time is the latest one. 
 function timeChanged() {
-    console.log('timeChanged called')
-    console.log(updatedTime2)
     return document.querySelector('#length2').value !== updatedTime2;
 }
 
 function bStartOrPause() {
-    if(timeChanged() === true) { //does this simply mean, if this function returns true?
-        getCustomTime2()
-    }
-	if(!intervalId2) { //if not currently counting down
-		intervalId2 = setInterval(timerFunc2, 1000);
-        startBBtn.textContent = 'pause'; //change btn to pause
-	} else {
-		clearInterval(intervalId2);
-		intervalId2 = null; 
-		startBBtn.textContent = 'start';
-	}
+    // if(prevVal === updatedTime2) { //If typed input has changed since last input 
+        if(timeChanged() === true) {  //this part causes the normal start pause functino to not work. 
+            getCustomTime2();
+            console.log('get latest value')
+        }
+    // } else { //if typed input has not been changed since last input
+        if(!intervalId2) { //if not currently counting down
+            intervalId2 = setInterval(timerFunc2, 1000);
+            startBBtn.textContent = 'pause'; 
+        } else {
+            clearInterval(intervalId2);
+            intervalId2 = null; 
+            startBBtn.textContent = 'start';
+        }
+    // }
 }
 startBBtn.addEventListener('click', bStartOrPause);
-//The updatedTime2 variable logs as undefined so I guess this is just a way to
-//compare it to the input value, and since they will always be not equal, then
-//the timeChanged function will always be true. And then this allows us to carry
-//on with an if statement condition to get the getCustomTime2 function to look
-//again at the input value which by that time is the latest one. 
 
 function bCancelTimer() {
     let alert2 = confirm('Are you sure you want to stop this session?')
@@ -189,11 +183,13 @@ function bCancelTimer() {
         intervalId2 = null; //this fixes the having to click on start twice
         startBBtn.textContent = 'start';
         getCustomTime2();
-    } else if(!alert && startBBtn.textContent === 'start') {
-        intervalId2 = setInterval(timerFunc2, 1000);
-        startBBtn.textContent = 'pause'; 
+    } else if(!alert2 && startBBtn.textContent === 'start') { 
+        startBBtn.textContent = 'start';
+        //when start is clicked again, start from where it was before. 
+        console.log('alert paused')
     } else {
         startBBtn.textContent = 'pause'; 
+        console.log('alert not paused')
     }
 }
 cancelBBtn.addEventListener('click', bCancelTimer)
