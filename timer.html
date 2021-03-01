@@ -128,11 +128,7 @@ function getCustomTime2() {
     let val2 = document.querySelector('#length2').value;
     let bStartingMins = val2;
     bTime = bStartingMins * 60;
-    console.log(val2, 'hi')
-}
-
-function startCountdown2() {
-    intervalId2 = setInterval(timerFunc2, 1000);
+    console.log(val2, 'getCustomTime2 called')
 }
         
 function timerFunc2() {
@@ -159,7 +155,16 @@ function timerFunc2() {
     }
 }
 
+function timeChanged() {
+    console.log('timeChanged called')
+    console.log(updatedTime2)
+    return document.querySelector('#length2').value !== updatedTime2;
+}
+
 function bStartOrPause() {
+    if(timeChanged() === true) { //does this simply mean, if this function returns true?
+        getCustomTime2()
+    }
 	if(!intervalId2) { //if not currently counting down
 		intervalId2 = setInterval(timerFunc2, 1000);
         startBBtn.textContent = 'pause'; //change btn to pause
@@ -170,6 +175,11 @@ function bStartOrPause() {
 	}
 }
 startBBtn.addEventListener('click', bStartOrPause);
+//The updatedTime2 variable logs as undefined so I guess this is just a way to
+//compare it to the input value, and since they will always be not equal, then
+//the timeChanged function will always be true. And then this allows us to carry
+//on with an if statement condition to get the getCustomTime2 function to look
+//again at the input value which by that time is the latest one. 
 
 function bCancelTimer() {
     let alert2 = confirm('Are you sure you want to stop this session?')
