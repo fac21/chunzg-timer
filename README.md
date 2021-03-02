@@ -5,13 +5,13 @@
 ### My process
 - Write out html first: make two separate timers in html.
 - Set up basic code with function for timer and add event listeners.
-- Googled to see if there is something like `Date()` for time only, which would allow the timer to automatically calculate the countdown without too much code (no!). I then referred to the Codewars kata dealing with the same topic. 
+- Googled to see if there is something like `Date()` for time only, which would allow the timer to automatically calculate the countdown without too much code (no!). I then referred to [this](https://www.codewars.com/kata/52685f7382004e774f0001f7) Codewars kata dealing with the same topic. 
 Wrote out algorithm in the startTimer function and looked up a tutorial to make sure. 
 - Decided I wanted to have two separate timers for work and break, and toggle between the two.
 
 ### Stretch Goals
 - Customized timer length: I implemented an input tag and saved the value to a variable. ✔️
-- Sound when timer ends: Audio from soundjay.com. ✔️
+- Sound when timer ends: Audio from [soundjay.com](www.soundjay.com). ✔️
 
 ### Learnings
 - Inbuilt `confirm()` function - similar to `alert()`, but has a 'cancel' as well as an 'ok' option. 
