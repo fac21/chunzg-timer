@@ -128,6 +128,7 @@ function showTimer() {
         heading.style.color = 'rgb(112, 139, 215)';
         document.body.style.transition = '.5s ease-out';
         document.querySelector('#length').value = '5';
+        startBtn.textContent = 'start';
         resetTimer()
     } else if(showBtn.textContent === 'Back to work ✍️') {
         heading.textContent = 'Work'
@@ -139,6 +140,7 @@ function showTimer() {
         heading.style.color = 'rgb(249, 64, 32)';
         document.body.style.transition = '.5s ease-out';
         document.querySelector('#length').value = '25';
+        startBtn.textContent = 'start';
         resetTimer()
     }
 }
