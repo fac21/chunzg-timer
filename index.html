@@ -117,7 +117,6 @@ function cancelTimer() {
 }
 cancelBtn.addEventListener('click', cancelTimer)
 
-showBtn.textContent = 'Take a break ☕️' //has to be assignment operator here
 function showTimer() {
     if(showBtn.textContent === 'Take a break ☕️') { //has to be comparison operator here
         heading.textContent = 'Break'
@@ -128,6 +127,7 @@ function showTimer() {
         document.body.style.backgroundColor = 'rgb(112, 139, 215)';
         heading.style.color = 'rgb(112, 139, 215)';
         document.body.style.transition = '.5s ease-out';
+        document.querySelector('#length').value = '5';
         resetTimer()
     } else if(showBtn.textContent === 'Back to work ✍️') {
         heading.textContent = 'Work'
@@ -138,6 +138,7 @@ function showTimer() {
         document.body.style.backgroundColor = 'rgb(249, 64, 32)';
         heading.style.color = 'rgb(249, 64, 32)';
         document.body.style.transition = '.5s ease-out';
+        document.querySelector('#length').value = '25';
         resetTimer()
     }
 }
