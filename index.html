@@ -11,220 +11,153 @@
 <body>
     
     <main class='center stack'>
-        <button class='timer-button'></button>
+        <button class='timer-button'>Take a break ☕️</button>
         <section class='one'>
             <h1>Work</h1>
-            <p><span class='work-timer'>00:00</span></p>
+            <p><span class='timer'>00:00</span></p>
             <form>
                 <input type='number' value='25' id='length'>
                 <label for='length'>minutes</label>
             </form>
             <p class='stack-sm'>
-                <button class='start-work'>start</button>
-                <button class='cancel-work'>clear</button>
-            </p>
-        </section>
-        <section class='two'>
-            <h1>Break</h1>
-            <p><span class='break-timer'>00:00</span></p>
-            <form>
-                <input type='number' value='5' id='length2'>
-                <label for='length2'>minutes</label>
-            </form>
-            <p class='stack-sm'>
-                <button class='start-break'>start</button>
-                <button class='cancel-break'>clear</button>
+                <button class='start'>start</button>
+                <button class='cancel'>clear</button>
             </p>
         </section>
     </main>
     <audio id='audio' src='http://www.soundjay.com/button/beep-07.wav' autoplay='false'></audio>
 
 <script>
-const startWBtn = document.querySelector('.start-work');
-const cancelWBtn = document.querySelector('.cancel-work');
-const wTimer = document.querySelector('.work-timer');
-const startBBtn = document.querySelector('.start-break');
-const cancelBBtn = document.querySelector('.cancel-break');
-const bTimer = document.querySelector('.break-timer');
+const startBtn = document.querySelector('.start');
+const cancelBtn = document.querySelector('.cancel');
+const timer = document.querySelector('.timer');
 const showBtn = document.querySelector('.timer-button');
-const sectionTwo = document.querySelector('.two');
-const sectionOne = document.querySelector('.one');
 const sound = document.querySelector('#audio');
+let heading = document.querySelector('h1');
 let intervalId;
-let intervalId2;
-
-//Work timer
-let wTime;
+let time;
 let updatedTime;
 
+//Take a break ☕️
+let startingMins;
+
 //Custom timer lengths
-function getCustomTime() {
-    let val = document.querySelector('#length').value;
-    let wStartingMins = val;
-    wTime = wStartingMins * 60;
+const getCustomTime = () => {
+    startingMins = document.querySelector('#length').value; //time we type in
+    time = startingMins * 60;
 }
         
 function timerFunc() {
-    if(updatedTime === wTime) {
+    if(updatedTime === time) {
         getCustomTime()
-        let minutes = Math.floor(wTime / 60) //total seconds divided by 60
-        let seconds = wTime % 60
+        let minutes = Math.floor(time / 60) //total seconds divided by 60
+        let seconds = time % 60
         minutes = minutes < 10 ? '0' + minutes : minutes;
         seconds = seconds < 10 ? '0' + seconds : seconds;
-        wTimer.textContent = `${minutes}:${seconds}`;
-        wTime--;
+        timer.textContent = `${minutes}:${seconds}`;
+        time--;
     } else {
-        let minutes = Math.floor(wTime / 60) //total seconds divided by 60
-        let seconds = wTime % 60 //total seconds mod 60 (remainder of minutes)
+        let minutes = Math.floor(time / 60) //total seconds divided by 60
+        let seconds = time % 60 //total seconds mod 60 (remainder of minutes)
         if(minutes < 0 && seconds < 0) {
             sound.play();
             return;
         } else {
-            wTime--
+            time--
         }
         minutes = minutes < 10 ? '0' + minutes : minutes;
         seconds = seconds < 10 ? '0' + seconds : seconds;
-        wTimer.textContent = `${minutes}:${seconds}`;
+        timer.textContent = `${minutes}:${seconds}`;
     }
 }
 
-function wStartOrPause() {
-	if(!intervalId) { //if not currently counting down
-		intervalId = setInterval(timerFunc, 1000); //start timer
-        startWBtn.textContent = 'pause'; //change btn to pause
-	} else {
-		clearInterval(intervalId);
-		intervalId = null; 
-		startWBtn.textContent = 'start';
-	}
-}
-startWBtn.addEventListener('click', wStartOrPause);
-
-function wCancelTimer() {
-    let alert = confirm('Are you sure you want to stop this session?')
-    if(alert) {
-        location.reload()
-    } else if(!alert && startWBtn.textContent === 'start') {
-        intervalId = setInterval(timerFunc, 1000);
-        startWBtn.textContent = 'pause';
-    } else {
-        startWBtn.textContent = 'pause'; 
-    }
-}
-cancelWBtn.addEventListener('click', wCancelTimer)
-
-//Break timer
-let bTime;
-let bStartingMins;
-let updatedTime2;
-let prevVal;
-
-//Custom timer lengths
-const getCustomTime2 = () => {
-    let val2 = document.querySelector('#length2').value;
-    bStartingMins = val2; //eg 5 
-    bTime = bStartingMins * 60;
-}
-        
-function timerFunc2() {
-    if(updatedTime2 === bTime) {
-        getCustomTime2()
-        let minutes = Math.floor(bTime / 60) //total seconds divided by 60
-        let seconds = bTime % 60
-        minutes = minutes < 10 ? '0' + minutes : minutes;
-        seconds = seconds < 10 ? '0' + seconds : seconds;
-        bTimer.textContent = `${minutes}:${seconds}`;
-        bTime--;
-    } else {
-        let minutes = Math.floor(bTime / 60) //total seconds divided by 60
-        let seconds = bTime % 60 //total seconds mod 60 (remainder of minutes)
-        if(minutes < 0 && seconds < 0) {
-            sound.play();
-            return;
-        } else {
-            bTime--
-        }
-        minutes = minutes < 10 ? '0' + minutes : minutes;
-        seconds = seconds < 10 ? '0' + seconds : seconds;
-        bTimer.textContent = `${minutes}:${seconds}`;
-    }
-}
-
-//Below: the updatedTime2 variable logs as undefined so this is just a way to
+//Below: the updatedTime variable logs as undefined so this is just a way to
 //compare it to the input value, and as they will always be not equal, the
 //timeChanged function will always be true. And then this allows us to carry on
-//with an if statement condition to get the getCustomTime2 function to look
+//with an if statement condition to get the getCustomTime function to look
 //again at the input value which by that time is the latest one. 
 const timeChanged = () => {
-    return document.querySelector('#length2').value !== updatedTime2;
+    return document.querySelector('#length').value !== updatedTime;
 }
 
-const bStartPause = () => {
-    if(!intervalId2) { //if not currently counting down
-        intervalId2 = setInterval(timerFunc2, 1000);
-        startBBtn.textContent = 'pause'; 
+const startPause = () => {
+    if(!intervalId) { //if not currently counting down
+        intervalId = setInterval(timerFunc, 1000);
+        startBtn.textContent = 'pause'; 
     } else {
-        clearInterval(intervalId2);
-        intervalId2 = null; 
-        startBBtn.textContent = 'start';
+        clearInterval(intervalId);
+        intervalId = null; 
+        startBtn.textContent = 'start';
     }
 }
 
-function bTriggerTimer() {
-    if(bTime === bStartingMins * 60) { //If typed input has changed since last input 
-        if(timeChanged() === true) {  //this part causes the normal start pause functino to not work. 
-            getCustomTime2();
+function triggerTimer() {
+    if(time === startingMins * 60) { //If typed input has changed since last input 
+        if(timeChanged() === true) { //this part causes the normal start pause functino to not work. 
+            getCustomTime();
             console.log('get latest value')
         }
-        bStartPause();
-    } else if(bTime !== bStartingMins * 60) { //if typed input has not been changed since last input
-        bStartPause();
+        startPause();
+    } else if(time !== startingMins * 60) { //if typed input has not been changed since last input
+        startPause();
     }
 }
-startBBtn.addEventListener('click', bTriggerTimer);
+startBtn.addEventListener('click', triggerTimer);
 
-function bCancelTimer() {
+function cancelTimer() {
     let alert2 = confirm('Are you sure you want to stop this session?')
     if(alert2) {
-        bTimer.textContent = '00:00'
-        clearInterval(intervalId2); //cancels the timer
-        intervalId2 = null; //this fixes the having to click on start twice
-        startBBtn.textContent = 'start';
-        getCustomTime2();
-    } else if(!alert2 && startBBtn.textContent === 'start') { 
-        startBBtn.textContent = 'start';
-        //when start is clicked again, start from where it was before. 
-        console.log('alert paused')
+        startBtn.textContent = 'start';
+        resetTimer()
+    } else if(!alert2 && startBtn.textContent === 'start') { 
+        startBtn.textContent = 'start';
     } else {
-        startBBtn.textContent = 'pause'; 
-        console.log('alert not paused')
+        startBtn.textContent = 'pause'; 
     }
 }
-cancelBBtn.addEventListener('click', bCancelTimer)
+cancelBtn.addEventListener('click', cancelTimer)
 
-showBtn.textContent = 'Break Timer' //has to be assignment operator here
+showBtn.textContent = 'Take a break ☕️' //has to be assignment operator here
 function showTimer() {
-    if(showBtn.textContent === 'Break Timer') { //has to be comparison operator here
-        sectionTwo.style.display = 'block';
-        sectionOne.style.display = 'none';
-        showBtn.textContent = 'Work Timer'; //has to be assignment operator here
-    } else if(showBtn.textContent === 'Work Timer') {
-        sectionTwo.style.display = 'none'; 
-        sectionOne.style.display = 'block';
-        showBtn.textContent = 'Break Timer';
+    if(showBtn.textContent === 'Take a break ☕️') { //has to be comparison operator here
+        heading.textContent = 'Break'
+        showBtn.textContent = 'Back to work ✍️'; //has to be assignment operator here
+        showBtn.style.backgroundColor = 'rgb(249, 64, 32)';
+        startBtn.style.backgroundColor = 'rgb(112, 139, 215)';
+        cancelBtn.style.backgroundColor = 'rgb(112, 139, 215)';
+        document.body.style.backgroundColor = 'rgb(112, 139, 215)';
+        heading.style.color = 'rgb(112, 139, 215)';
+        document.body.style.transition = '.5s ease-out';
+        resetTimer()
+    } else if(showBtn.textContent === 'Back to work ✍️') {
+        heading.textContent = 'Work'
+        showBtn.textContent = 'Take a break ☕️';
+        showBtn.style.backgroundColor = 'rgb(112, 139, 215)';
+        startBtn.style.backgroundColor = 'rgb(249, 64, 32)';
+        cancelBtn.style.backgroundColor = 'rgb(249, 64, 32)';
+        document.body.style.backgroundColor = 'rgb(249, 64, 32)';
+        heading.style.color = 'rgb(249, 64, 32)';
+        document.body.style.transition = '.5s ease-out';
+        resetTimer()
     }
 }
 showBtn.addEventListener('click', showTimer);
+
+const resetTimer = () => {
+    timer.textContent = '00:00'
+    clearInterval(intervalId); 
+    intervalId = null; //fixes having to click on start twice
+    getCustomTime();
+}
 
 </script>
 <style>
 * {
     font-family: Epilogue;
     font-size: 1.3rem;
-    /* color: rgb(152, 0, 66); */
     color: rgb(249, 64, 32);
 }
-html {
+body {
     background: rgb(249, 64, 32);
 }
 .two {
@@ -268,6 +201,9 @@ button {
     text-align: center;
     font-size: .8rem;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+.timer-button {
+    background: rgb(112, 139, 215);
 }
 button:hover {
     cursor: pointer;
