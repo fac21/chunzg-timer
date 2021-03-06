@@ -12,17 +12,19 @@
     
     <main class='center stack'>
         <button class='timer-button'>Take a break ☕️</button>
-        <section class='one'>
+        <section class='circle'>
+          <section class='content'>
             <h1>Work</h1>
             <p><span class='timer'>00:00</span></p>
             <form>
                 <input type='number' value='25' id='length'>
                 <label for='length'>minutes</label>
             </form>
-            <p class='stack-sm'>
+            <p>
                 <button class='start'>start</button>
                 <button class='cancel'>clear</button>
             </p>
+          </section>
         </section>
     </main>
     <audio id='audio' src='http://www.soundjay.com/button/beep-07.wav' autoplay='false'></audio>
@@ -121,6 +123,7 @@ function showTimer() {
     if(showBtn.textContent === 'Take a break ☕️') { //has to be comparison operator here
         heading.textContent = 'Break'
         showBtn.textContent = 'Back to work ✍️'; //has to be assignment operator here
+        startBtn.textContent = 'start';
         showBtn.style.backgroundColor = 'rgb(249, 64, 32)';
         startBtn.style.backgroundColor = 'rgb(112, 139, 215)';
         cancelBtn.style.backgroundColor = 'rgb(112, 139, 215)';
@@ -128,11 +131,11 @@ function showTimer() {
         heading.style.color = 'rgb(112, 139, 215)';
         document.body.style.transition = '.5s ease-out';
         document.querySelector('#length').value = '5';
-        startBtn.textContent = 'start';
         resetTimer()
     } else if(showBtn.textContent === 'Back to work ✍️') {
         heading.textContent = 'Work'
         showBtn.textContent = 'Take a break ☕️';
+        startBtn.textContent = 'start';
         showBtn.style.backgroundColor = 'rgb(112, 139, 215)';
         startBtn.style.backgroundColor = 'rgb(249, 64, 32)';
         cancelBtn.style.backgroundColor = 'rgb(249, 64, 32)';
@@ -140,7 +143,6 @@ function showTimer() {
         heading.style.color = 'rgb(249, 64, 32)';
         document.body.style.transition = '.5s ease-out';
         document.querySelector('#length').value = '25';
-        startBtn.textContent = 'start';
         resetTimer()
     }
 }
@@ -163,9 +165,6 @@ const resetTimer = () => {
 body {
     background: rgb(249, 64, 32);
 }
-.two {
-    display: none;
-}
 .center {
     display: flex;
     flex-direction: column;
@@ -179,14 +178,11 @@ body {
 .stack > * {
     margin-top: 1rem;
 }
-.stack-sm > * {
-    margin-top: 1rem;
-}
 h1 {
     font-size: 2rem;
 }
-h2 {
-    font-size: 1rem;
+p {
+    margin: 0;
 }
 input {
     color: #333;
@@ -194,12 +190,14 @@ input {
     width: 3rem;
     border: 2px solid silver;
     border-radius: 4px;
+    margin-bottom: 1rem;
 }
 button {
     background-color: rgb(249, 64, 32);
     border: none;
     border-radius: 1.5rem;
     color: white;
+    margin-top: 1rem;
     padding: .8rem 2rem;
     text-align: center;
     font-size: .8rem;
@@ -215,10 +213,16 @@ span {
     font-size: 4rem;
     color: #333;
 }
-section {
+.circle {
     background: honeydew;
-    padding: 5rem;
     border-radius: 50%;
+    border-width: 2rem;
+    border-color: black;
+    width: 22rem;
+    height: 22rem;
+}
+.content {
+    margin-top: 3rem;
 }
 label {
     color: #333;
