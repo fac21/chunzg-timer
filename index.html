@@ -11,21 +11,32 @@
 <body>
     
     <main class='center stack'>
-        <button class='timer-button'>Take a break ☕️</button>
-        <section class='circle'>
-          <section class='content'>
-            <h1>Work</h1>
-            <p><span class='timer'>00:00</span></p>
-            <form>
-                <input type='number' value='25' id='length'>
-                <label for='length'>minutes</label>
-            </form>
-            <p>
-                <button class='start'>start</button>
-                <button class='cancel'>clear</button>
-            </p>
-          </section>
+      <section class='space'>
+
+            <div class='circle1'></div>
+            <div class ='circle2'></div>
+            <div class='box1'></div>
+            <div class='box2'></div>
+            <div class='box3'></div>
+            <div class='box4'></div>
+
+        <section id='inner-circle'>
+            <section class='content'>
+               <h1>Work</h1>
+               <p><span class='timer'>00:00</span></p>
+               <form>
+                   <input type='number' value='25' id='length'>
+                   <label for='length'>minutes</label>
+               </form>
+               <p>
+                   <button class='start'>start</button>
+                   <button class='cancel'>clear</button><br>
+                   <button class='timer-button'>Take a break ☕️</button>
+               </p>
+            </section>
         </section>
+      </section>
+          
     </main>
     <audio id='audio' src='http://www.soundjay.com/button/beep-07.wav' autoplay='false'></audio>
 
@@ -35,6 +46,12 @@ const cancelBtn = document.querySelector('.cancel');
 const timer = document.querySelector('.timer');
 const showBtn = document.querySelector('.timer-button');
 const sound = document.querySelector('#audio');
+const box1 = document.querySelector('.box1')
+const box2 = document.querySelector('.box2')
+const box3 = document.querySelector('.box3')
+const box4 = document.querySelector('.box4')
+const outerCircle = document.querySelector('.outer-circle');
+const circle2 = document.querySelector('.circle2')
 let heading = document.querySelector('h1');
 let intervalId;
 let time;
@@ -90,6 +107,10 @@ const startPause = () => {
         clearInterval(intervalId);
         intervalId = null; 
         startBtn.textContent = 'start';
+        box1.style.transition = 'transform 0s linear';
+        // box2.style.transition = '0s'
+        // box3.style.transition = '0s'
+        // box4.style.transition = '0s'
     }
 }
 
@@ -103,6 +124,15 @@ function triggerTimer() {
     } else if(time !== startingMins * 60) { //if typed input has not been changed since last input
         startPause();
     }
+    box1.style.transition = 'transform 60s linear';
+    box1.style.transform = 'rotate(360deg)';
+    box2.style.transition = 'transform 45s linear 15s';
+    box2.style.transform = 'rotate(270deg)';
+    box3.style.transition = 'transform 30s linear 30s';
+    box3.style.transform = 'rotate(180deg)';
+    box4.style.transition = 'transform 15s linear 45s';
+    box4.style.transform = 'rotate(90deg)';
+    circle2.classList.add('animated');
 }
 startBtn.addEventListener('click', triggerTimer);
 
@@ -131,6 +161,14 @@ function showTimer() {
         heading.style.color = 'rgb(112, 139, 215)';
         document.body.style.transition = '.5s ease-out';
         document.querySelector('#length').value = '5';
+        box1.style.backgroundColor = 'rgb(112, 139, 215)';
+        box1.style.transition = '.5s ease-out';
+        box2.style.backgroundColor = 'rgb(112, 139, 215)';
+        box2.style.transition = '.5s ease-out';
+        box3.style.backgroundColor = 'rgb(112, 139, 215)';
+        box3.style.transition = '.5s ease-out';
+        box4.style.backgroundColor = 'rgb(112, 139, 215)';
+        box4.style.transition = '.5s ease-out';
         resetTimer()
     } else if(showBtn.textContent === 'Back to work ✍️') {
         heading.textContent = 'Work'
@@ -143,6 +181,14 @@ function showTimer() {
         heading.style.color = 'rgb(249, 64, 32)';
         document.body.style.transition = '.5s ease-out';
         document.querySelector('#length').value = '25';
+        box1.style.backgroundColor = 'rgb(249, 64, 32)';
+        box1.style.transition = '.5s ease-out';
+        box2.style.backgroundColor = 'rgb(249, 64, 32)';
+        box2.style.transition = '.5s ease-out';
+        box3.style.backgroundColor = 'rgb(249, 64, 32)';
+        box3.style.transition = '.5s ease-out';
+        box4.style.backgroundColor = 'rgb(249, 64, 32)';
+        box4.style.transition = '.5s ease-out';
         resetTimer()
     }
 }
@@ -213,16 +259,90 @@ span {
     font-size: 4rem;
     color: #333;
 }
-.circle {
+.space {
+    position: relative;
+    width: 30rem;
+    height: 30rem;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.circle1{
+    position: absolute;
+    border-radius: 50%;
+    border: 2.5rem solid honeydew;
+    width: 25rem;
+    height: 25rem;
+}
+.box1, .box2, .box3, .box4 {
+    position: absolute;
+    width: 15rem;
+    height: 15rem;
+    background:rgb(249, 64, 32);
+    z-index: 2;
+}
+.box1 {
+    right: 0;
+    top: 0;
+    transform-origin: bottom left;
+    z-index: 2;
+}
+.box2 {
+    right: 0;
+    bottom: 0;
+    transform-origin: top left;
+} 
+.box3 {
+    left: 0;
+    bottom: 0;
+    transform-origin: top right;
+} 
+.box4 {
+    left: 0;
+    top: 0;
+    transform-origin: bottom right;
+} 
+.circle2 {
+    border: 2.5rem solid honeydew;
+    width: 12.5rem;
+    height: 25rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-top-right-radius: 27.5rem;
+    border-bottom-right-radius: 27.5rem;
+    border-left: 0;
+    z-index: 3;
+    opacity: 0;
+}
+.circle2.animated {
+    animation: do 0s 31s forwards;
+}
+@keyframes do {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+/* @keyframes do2 {
+    0% {
+        opacity: 1;
+    }
+} */
+#inner-circle {
+    position: absolute;
     background: honeydew;
     border-radius: 50%;
-    border-width: 2rem;
-    border-color: black;
-    width: 22rem;
-    height: 22rem;
+    width: 28rem;
+    height: 28rem;
+    z-index: 3;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
 .content {
     margin-top: 3rem;
+    z-index: 2;
 }
 label {
     color: #333;
@@ -233,3 +353,4 @@ label {
 </body>
 
 </html>
+
