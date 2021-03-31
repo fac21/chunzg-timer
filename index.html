@@ -5,20 +5,20 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <link href='https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600&display=swap' rel='stylesheet'>
-
+    <link rel="stylesheet" href="style.css">
     <title>Chun's Pomodoro Timer</title>
 </head>
 <body>
     
-    <main class='center stack'>
+    <main class='center'>
       <section class='space'>
 
-            <div class='circle1'></div>
-            <div class ='circle2'></div>
-            <div class='box1'></div>
-            <div class='box2'></div>
-            <div class='box3'></div>
-            <div class='box4'></div>
+        <div class='circle1'></div>
+        <div class='circle2'></div>
+        <div class='box1'></div>
+        <div class='box2'></div>
+        <div class='box3'></div>
+        <div class='box4'></div>
 
         <section id='inner-circle'>
             <section class='content'>
@@ -28,16 +28,17 @@
                    <input type='number' value='25' id='length'>
                    <label for='length'>minutes</label>
                </form>
-               <p>
+               <p class='button-group'>
                    <button class='start'>start</button>
                    <button class='cancel'>clear</button><br>
                    <button class='timer-button'>Take a break ☕️</button>
                </p>
             </section>
         </section>
+
       </section>
-          
     </main>
+
     <audio id='audio' src='http://www.soundjay.com/button/beep-07.wav' autoplay='false'></audio>
 
 <script>
@@ -51,7 +52,6 @@ const box2 = document.querySelector('.box2')
 const box3 = document.querySelector('.box3')
 const box4 = document.querySelector('.box4')
 const outerCircle = document.querySelector('.outer-circle');
-const circle2 = document.querySelector('.circle2')
 let heading = document.querySelector('h1');
 let intervalId;
 let time;
@@ -132,7 +132,6 @@ function triggerTimer() {
     box3.style.transform = 'rotate(180deg)';
     box4.style.transition = 'transform 15s linear 45s';
     box4.style.transform = 'rotate(90deg)';
-    circle2.classList.add('animated');
 }
 startBtn.addEventListener('click', triggerTimer);
 
@@ -202,154 +201,7 @@ const resetTimer = () => {
 }
 
 </script>
-<style>
-* {
-    font-family: Epilogue;
-    font-size: 1.3rem;
-    color: rgb(249, 64, 32);
-}
-body {
-    background: rgb(249, 64, 32);
-}
-.center {
-    display: flex;
-    flex-direction: column;
-    max-width: 30rem;
-    margin: auto;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: 0.1rem;
-    text-align: center;
-}
-.stack > * {
-    margin-top: 1rem;
-}
-h1 {
-    font-size: 2rem;
-}
-p {
-    margin: 0;
-}
-input {
-    color: #333;
-    padding: .5rem;
-    width: 3rem;
-    border: 2px solid silver;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-}
-button {
-    background-color: rgb(249, 64, 32);
-    border: none;
-    border-radius: 1.5rem;
-    color: white;
-    margin-top: 1rem;
-    padding: .8rem 2rem;
-    text-align: center;
-    font-size: .8rem;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-}
-.timer-button {
-    background: rgb(112, 139, 215);
-}
-button:hover {
-    cursor: pointer;
-}
-span {
-    font-size: 4rem;
-    color: #333;
-}
-.space {
-    position: relative;
-    width: 30rem;
-    height: 30rem;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-}
-.circle1{
-    position: absolute;
-    border-radius: 50%;
-    border: 2.5rem solid honeydew;
-    width: 25rem;
-    height: 25rem;
-}
-.box1, .box2, .box3, .box4 {
-    position: absolute;
-    width: 15rem;
-    height: 15rem;
-    background:rgb(249, 64, 32);
-    z-index: 2;
-}
-.box1 {
-    right: 0;
-    top: 0;
-    transform-origin: bottom left;
-    z-index: 2;
-}
-.box2 {
-    right: 0;
-    bottom: 0;
-    transform-origin: top left;
-} 
-.box3 {
-    left: 0;
-    bottom: 0;
-    transform-origin: top right;
-} 
-.box4 {
-    left: 0;
-    top: 0;
-    transform-origin: bottom right;
-} 
-.circle2 {
-    border: 2.5rem solid honeydew;
-    width: 12.5rem;
-    height: 25rem;
-    position: absolute;
-    top: 0;
-    right: 0;
-    border-top-right-radius: 27.5rem;
-    border-bottom-right-radius: 27.5rem;
-    border-left: 0;
-    z-index: 3;
-    opacity: 0;
-}
-.circle2.animated {
-    animation: do 0s 31s forwards;
-}
-@keyframes do {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-/* @keyframes do2 {
-    0% {
-        opacity: 1;
-    }
-} */
-#inner-circle {
-    position: absolute;
-    background: honeydew;
-    border-radius: 50%;
-    width: 28rem;
-    height: 28rem;
-    z-index: 3;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-}
-.content {
-    margin-top: 3rem;
-    z-index: 2;
-}
-label {
-    color: #333;
-}
 
-
-</style>
 </body>
 
 </html>
