@@ -52,6 +52,7 @@ const box2 = document.querySelector('.box2')
 const box3 = document.querySelector('.box3')
 const box4 = document.querySelector('.box4')
 const outerCircle = document.querySelector('.outer-circle');
+const circle2 = document.querySelector('.circle2')
 let heading = document.querySelector('h1');
 let intervalId;
 let time;
@@ -132,6 +133,7 @@ function triggerTimer() {
     box3.style.transform = 'rotate(180deg)';
     box4.style.transition = 'transform 15s linear 45s';
     box4.style.transform = 'rotate(90deg)';
+    circle2.classList.add('animated');
 }
 startBtn.addEventListener('click', triggerTimer);
 

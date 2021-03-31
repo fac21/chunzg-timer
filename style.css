@@ -74,6 +74,8 @@ span {
     border-left: 0;
     opacity: 0;
     z-index: 2;
+}
+.animated {
     animation: do 0s 31s forwards;
 }
 @keyframes do {
@@ -85,6 +87,11 @@ span {
         z-index: 2;
     }
 }
+/* @keyframes do2 {
+    0% {
+        opacity: 1;
+    }
+} */
 .box1, .box2, .box3, .box4 {
     position: absolute;
     width: 15rem;
@@ -112,11 +119,6 @@ span {
     top: 0;
     transform-origin: bottom right;
 } 
-/* @keyframes do2 {
-    0% {
-        opacity: 1;
-    }
-} */
 #inner-circle {
     position: absolute;
     background: honeydew;
@@ -134,21 +136,35 @@ label {
 }
 
 @media only screen and (max-width: 600px) {
-    .circle1{
-        border: 2.2rem solid honeydew;
-        width: 13rem;
-        height: 13rem;
+    .space {
+        width: 15rem;
+        height: 15rem;
+        margin-top: 2rem;
+        box-sizing: border-box;
+    }
+    .circle1 {
+        border: 1.25rem solid honeydew;
+        width: 12.5rem;
+        height: 12.5rem;
     }
     .circle2 {
-        border: 2.2rem solid honeydew;
-        width: 6.5rem;
-        height: 13rem;
-        position: relative;
+        border: 1.25rem solid honeydew;
+        width: 6.25rem;
+        height: 12.5rem;
+        border-left: 0;
     }
     #inner-circle {
-        width: 12em;
-        height: 12em;
+        width: 14rem;
+        height: 14rem;
     }
+    .box1, .box2, .box3, .box4 {
+        position: absolute;
+        width: 7.5rem;
+        height: 7.5rem;
+        background:rgb(249, 64, 32);
+        z-index: 1;
+    }
+    
     .timer {
         font-size: 1.5rem;
     }
@@ -167,7 +183,7 @@ label {
         width: 2.4rem;
     }
     .button-group {
-        margin-top: 6rem;
+        margin-top: 5rem;
     }
 }
 
