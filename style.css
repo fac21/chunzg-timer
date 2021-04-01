@@ -59,12 +59,13 @@ span {
 .circle1 {
     position: absolute;
     border-radius: 50%;
-    border: 2.5rem solid #333;
+    border: 2.5rem solid rgb(135, 167, 255);
     width: 25rem;
     height: 25rem;
+    opacity: 0;
 }
 .circle2 {
-    border: 2.5rem solid #333;
+    border: 2.5rem solid rgb(135, 167, 255);
     width: 12.5rem;
     height: 25rem;
     position: absolute;

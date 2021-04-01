@@ -86,6 +86,7 @@ const pauseDial = () => { //this part still not working - able to pause but not 
 }
 
 const playDial = () => {
+    circle1.style.opacity = '1';
     box1.style.transition = `transform ${startingMins * 60}s linear`
     box1.style.transform = 'rotate(360deg)';
     box2.style.transition = `transform ${(startingMins * 60) * 0.75}s linear ${(startingMins * 60) * 0.25}s`
@@ -176,12 +177,13 @@ const resetTimer = () => {
 }
 
 function resetDial() {
-    box1.style.transition = `transform 1s linear`
+    box1.style.transition = `transform 2s linear`
     box1.style.transform = 'rotate(0deg)';
-    box2.style.transition = `transform 1s linear`
+    box2.style.transition = `transform 2s linear`
     box2.style.transform = 'rotate(0deg)';
-    box3.style.transition = `transform 1s linear`
+    box3.style.transition = `transform 2s linear`
     box3.style.transform = 'rotate(0deg)';
-    box4.style.transition = `transform 1s linear`
+    box4.style.transition = `transform 2s linear`
     box4.style.transform = 'rotate(0deg)';
+    circle2.style.opacity = '0';
 }
