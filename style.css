@@ -59,12 +59,12 @@ span {
 .circle1 {
     position: absolute;
     border-radius: 50%;
-    border: 2.5rem solid honeydew;
+    border: 2.5rem solid #333;
     width: 25rem;
     height: 25rem;
 }
 .circle2 {
-    border: 2.5rem solid honeydew;
+    border: 2.5rem solid #333;
     width: 12.5rem;
     height: 25rem;
     position: absolute;
@@ -76,23 +76,6 @@ span {
     opacity: 0;
     z-index: 2;
 }
-/* .animated {
-    animation: do 0s 31s forwards;
-}
-@keyframes do {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-        z-index: 2;
-    }
-} */
-/* @keyframes do2 {
-    0% {
-        opacity: 1;
-    }
-} */
 .box1, .box2, .box3, .box4 {
     position: absolute;
     width: 15rem;
@@ -158,12 +141,12 @@ label {
         margin-top: 2rem;
     }
     .circle1 {
-        border: 1.25rem solid honeydew;
+        border: 1.25rem solid rgb(135, 167, 255);
         width: 12.5rem;
         height: 12.5rem;
     }
     .circle2 {
-        border: 1.25rem solid honeydew;
+        border: 1.25rem solid rgb(135, 167, 255);
         width: 6.25rem;
         height: 12.5rem;
         border-left: 0;

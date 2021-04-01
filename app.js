@@ -1,7 +1,7 @@
 const startBtn = document.querySelector('.start');
 const clearBtn = document.querySelector('.clear');
 const timer = document.querySelector('.timer');
-const showBtn = document.querySelector('.timer-button');
+const changeBtn = document.querySelector('.timer-button');
 const sound = document.querySelector('#audio');
 const box1 = document.querySelector('.box1')
 const box2 = document.querySelector('.box2')
@@ -37,8 +37,8 @@ function timerFunc() {
         let seconds = time % 60 //total seconds mod 60 (remainder of minutes)
         if(minutes < 0 && seconds < 0) {
             sound.play();
-            circle1.style.opacity = '0';
-            circle2.style.opacity = '0';
+            circle1.style.opacity = '0'; //clear dial 
+            circle2.style.opacity = '0'; //clear semi-dial
             return;
         } else {
             for(let i = time; i <= time; time--) {
@@ -67,16 +67,18 @@ const startPause = () => {
     if(!intervalId) { //if not currently counting down
         intervalId = setInterval(timerFunc, 1000);
         startBtn.textContent = 'pause'; 
-        // restartDial();
+        changeBtn.disabled = true;
+        // playDial(); //this doesn't work yet
     } else {
         clearInterval(intervalId);
         intervalId = null; 
         startBtn.textContent = 'start';
+        changeBtn.disabled = false;
         pauseDial();
     }
 }
 
-const pauseDial = () => {
+const pauseDial = () => { //this part still not working - able to pause but not start again. 
     box1.style.transform = window.getComputedStyle(box1).getPropertyValue("transform")||"initial";
     box2.style.transform = window.getComputedStyle(box2).getPropertyValue("transform")||"initial";
     box3.style.transform = window.getComputedStyle(box3).getPropertyValue("transform")||"initial";
@@ -119,12 +121,12 @@ function cancelTimer() {
 }
 clearBtn.addEventListener('click', cancelTimer)
 
-function showTimer() {
-    if(showBtn.textContent === 'Take a break ☕️') { //has to be comparison operator here
+function changeTimer() {
+    if(changeBtn.textContent === 'Take a break ☕️') { //has to be comparison operator here
         heading.textContent = 'Break'
-        showBtn.textContent = 'Back to work ✍️'; //has to be assignment operator here
+        changeBtn.textContent = 'Back to work ✍️'; //has to be assignment operator here
         startBtn.textContent = 'start';
-        showBtn.style.backgroundColor = 'rgb(249, 64, 32)';
+        changeBtn.style.backgroundColor = 'rgb(249, 64, 32)';
         startBtn.style.backgroundColor = 'rgb(112, 139, 215)';
         clearBtn.style.backgroundColor = 'rgb(112, 139, 215)';
         document.body.style.backgroundColor = 'rgb(112, 139, 215)';
@@ -140,11 +142,11 @@ function showTimer() {
         box4.style.backgroundColor = 'rgb(112, 139, 215)';
         box4.style.transition = '.5s ease-out';
         resetTimer()
-    } else if(showBtn.textContent === 'Back to work ✍️') {
+    } else if(changeBtn.textContent === 'Back to work ✍️') {
         heading.textContent = 'Work'
-        showBtn.textContent = 'Take a break ☕️';
+        changeBtn.textContent = 'Take a break ☕️';
         startBtn.textContent = 'start';
-        showBtn.style.backgroundColor = 'rgb(112, 139, 215)';
+        changeBtn.style.backgroundColor = 'rgb(112, 139, 215)';
         startBtn.style.backgroundColor = 'rgb(249, 64, 32)';
         clearBtn.style.backgroundColor = 'rgb(249, 64, 32)';
         document.body.style.backgroundColor = 'rgb(249, 64, 32)';
@@ -162,12 +164,24 @@ function showTimer() {
         resetTimer()
     }
 }
-showBtn.addEventListener('click', showTimer);
+changeBtn.addEventListener('click', changeTimer);
 
 const resetTimer = () => {
     timer.textContent = '00:00'
     clearInterval(intervalId); 
     intervalId = null; //fixes having to click on start twice
+    changeBtn.disabled = false;
+    resetDial();
     getCustomTime();
 }
 
+function resetDial() {
+    box1.style.transition = `transform 1s linear`
+    box1.style.transform = 'rotate(0deg)';
+    box2.style.transition = `transform 1s linear`
+    box2.style.transform = 'rotate(0deg)';
+    box3.style.transition = `transform 1s linear`
+    box3.style.transform = 'rotate(0deg)';
+    box4.style.transition = `transform 1s linear`
+    box4.style.transform = 'rotate(0deg)';
+}
