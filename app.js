@@ -7,14 +7,12 @@ const box1 = document.querySelector('.box1')
 const box2 = document.querySelector('.box2')
 const box3 = document.querySelector('.box3')
 const box4 = document.querySelector('.box4')
-const circle2 = document.querySelector('.circle2')
 const circle1 = document.querySelector('.circle1')
-let heading = document.querySelector('h1');
+const circle2 = document.querySelector('.circle2')
+const heading = document.querySelector('h1');
+
 let intervalId;
 let time;
-let updatedTime;
-
-//Take a break ☕️
 let startingMins;
 
 //Custom timer lengths
@@ -22,20 +20,22 @@ const getCustomTime = () => {
     startingMins = document.querySelector('#length').value; //time we type in
     time = startingMins * 60;
 }
-        
+
 function timerFunc() {
-    if(updatedTime === time) {
+    //first ever iteration of timer on page refresh
+    if(time === undefined) { 
         getCustomTime()
         let minutes = Math.floor(time / 60) //total seconds divided by 60
-        let seconds = time % 60
+        let seconds = time % 60 //total seconds mod 60 (remainder of minutes)
         minutes = minutes < 10 ? '0' + minutes : minutes;
         seconds = seconds < 10 ? '0' + seconds : seconds;
         timer.textContent = `${minutes}:${seconds}`;
         time--;
     } else {
-        let minutes = Math.floor(time / 60) //total seconds divided by 60
-        let seconds = time % 60 //total seconds mod 60 (remainder of minutes)
-        if(minutes < 0 && seconds < 0) {
+        //after first ever iteration
+        let minutes = Math.floor(time / 60)
+        let seconds = time % 60 
+        if(time < 0) {
             sound.play();
             circle1.style.opacity = '0'; //clear dial 
             circle2.style.opacity = '0'; //clear semi-dial
@@ -54,60 +54,49 @@ function timerFunc() {
     }
 }
 
-//Below: the updatedTime variable logs as undefined so this is just a way to
-//compare it to the input value, and as they will always be not equal, the
-//timeChanged function will always be true. And then this allows us to carry on
-//with an if statement condition to get the getCustomTime function to look
-//again at the input value which by that time is the latest one. 
-const timeChanged = () => {
-    return document.querySelector('#length').value !== updatedTime;
+function triggerTimer() {
+    if(time === undefined) { //always starts with time as undefined
+        startPause();
+    } else if(time === startingMins * 60) { //If typed input has changed since last input 
+        getCustomTime(); //get the getCustomTime function to look again at the input value which by that time is the latest one. 
+        startPause();
+    }
 }
+startBtn.addEventListener('click', triggerTimer);
 
 const startPause = () => {
     if(!intervalId) { //if not currently counting down
         intervalId = setInterval(timerFunc, 1000);
         startBtn.textContent = 'pause'; 
         changeBtn.disabled = true;
-        // playDial(); //this doesn't work yet
+        // playDial(); 
     } else {
         clearInterval(intervalId);
         intervalId = null; 
         startBtn.textContent = 'start';
         changeBtn.disabled = false;
-        pauseDial();
+        // pauseDial();
     }
 }
 
-const pauseDial = () => { //this part still not working - able to pause but not start again. 
-    box1.style.transform = window.getComputedStyle(box1).getPropertyValue("transform")||"initial";
-    box2.style.transform = window.getComputedStyle(box2).getPropertyValue("transform")||"initial";
-    box3.style.transform = window.getComputedStyle(box3).getPropertyValue("transform")||"initial";
-    box4.style.transform = window.getComputedStyle(box4).getPropertyValue("transform")||"initial";
-}
+// const pauseDial = () => { //this part still not working - able to pause but not start again. 
+//     box1.style.transform = window.getComputedStyle(box1).getPropertyValue("transform")||"initial";
+//     box2.style.transform = window.getComputedStyle(box2).getPropertyValue("transform")||"initial";
+//     box3.style.transform = window.getComputedStyle(box3).getPropertyValue("transform")||"initial";
+//     box4.style.transform = window.getComputedStyle(box4).getPropertyValue("transform")||"initial";
+// }
 
 const playDial = () => {
-    circle1.style.opacity = '1';
-    box1.style.transition = `transform ${startingMins * 60}s linear`
-    box1.style.transform = 'rotate(360deg)';
-    box2.style.transition = `transform ${(startingMins * 60) * 0.75}s linear ${(startingMins * 60) * 0.25}s`
-    box2.style.transform = 'rotate(270deg)';
-    box3.style.transition = `transform ${(startingMins * 60) * 0.5}s linear ${(startingMins * 60) * 0.5}s`
-    box3.style.transform = 'rotate(180deg)';
-    box4.style.transition = `transform ${(startingMins * 60) * 0.25}s linear ${(startingMins * 60) * 0.75}s`
-    box4.style.transform = 'rotate(90deg)';
+    let rotation = Math.floor(360 - ((time / startingMins * 30) * 180))
+    box1.style.transition = `transform 1s linear`
+    box1.style.transform = `rotate(${Math.min(rotation, 180)}deg)`
+    // box2.style.transition = `transform ${(startingMins * 60) * 0.75}s linear ${(startingMins * 60) * 0.25}s`
+    // box2.style.transform = 'rotate(270deg)';
+    // box3.style.transition = `transform ${(startingMins * 60) * 0.5}s linear ${(startingMins * 60) * 0.5}s`
+    // box3.style.transform = 'rotate(180deg)';
+    // box4.style.transition = `transform ${(startingMins * 60) * 0.25}s linear ${(startingMins * 60) * 0.75}s`
+    // box4.style.transform = 'rotate(90deg)';
 }
-
-function triggerTimer() {
-    if(time === startingMins * 60) { //If typed input has changed since last input 
-        if(timeChanged() === true) { //this part causes the normal start pause functino to not work. 
-            getCustomTime();
-        }
-        startPause();
-    } else if(time !== startingMins * 60) { //if typed input has not been changed since last input
-        startPause();
-    }
-}
-startBtn.addEventListener('click', triggerTimer);
 
 function cancelTimer() {
     let alert2 = confirm('Are you sure you want to stop this session?')
@@ -177,13 +166,15 @@ const resetTimer = () => {
 }
 
 function resetDial() {
-    box1.style.transition = `transform 2s linear`
+    //moves all boxes back to original angle, and makes circle2 invisible
+    box1.style.transition = `transform 1s linear`
     box1.style.transform = 'rotate(0deg)';
-    box2.style.transition = `transform 2s linear`
+    box2.style.transition = `transform 1s linear`
     box2.style.transform = 'rotate(0deg)';
     box3.style.transition = `transform 2s linear`
     box3.style.transform = 'rotate(0deg)';
     box4.style.transition = `transform 2s linear`
     box4.style.transform = 'rotate(0deg)';
-    circle2.style.opacity = '0';
+    circle2.style.transition = '1s'
+    circle2.style.opacity = '0'; 
 }
