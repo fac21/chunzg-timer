@@ -23,7 +23,7 @@ const getCustomTime = () => {
 
 function timerFunc() {
     //first ever iteration of timer on page refresh
-    if(time === undefined) { 
+    if(time === undefined) {
         getCustomTime()
         let minutes = Math.floor(time / 60) //total seconds divided by 60
         let seconds = time % 60 //total seconds mod 60 (remainder of minutes)
@@ -32,10 +32,10 @@ function timerFunc() {
         timer.textContent = `${minutes}:${seconds}`;
         time--;
     } else {
-        //after first ever iteration
+        //after first iteration
         let minutes = Math.floor(time / 60)
         let seconds = time % 60 
-        if(time < 0) {
+        if(minutes < 0 && seconds < 0) {
             sound.play();
             circle1.style.opacity = '0'; //clear dial 
             circle2.style.opacity = '0'; //clear semi-dial
@@ -55,10 +55,10 @@ function timerFunc() {
 }
 
 function triggerTimer() {
-    if(time === undefined) { //always starts with time as undefined
+    if(time !== startingMins * 60) { //if typed input has not been changed since last input - always starts with time as undefined, startMins*60 as NaN
         startPause();
     } else if(time === startingMins * 60) { //If typed input has changed since last input 
-        getCustomTime(); //get the getCustomTime function to look again at the input value which by that time is the latest one. 
+        getCustomTime();
         startPause();
     }
 }
@@ -69,33 +69,32 @@ const startPause = () => {
         intervalId = setInterval(timerFunc, 1000);
         startBtn.textContent = 'pause'; 
         changeBtn.disabled = true;
-        // playDial(); 
+        // playDial(); //this doesn't work yet
     } else {
         clearInterval(intervalId);
         intervalId = null; 
         startBtn.textContent = 'start';
         changeBtn.disabled = false;
-        // pauseDial();
+        pauseDial();
     }
 }
 
-// const pauseDial = () => { //this part still not working - able to pause but not start again. 
-//     box1.style.transform = window.getComputedStyle(box1).getPropertyValue("transform")||"initial";
-//     box2.style.transform = window.getComputedStyle(box2).getPropertyValue("transform")||"initial";
-//     box3.style.transform = window.getComputedStyle(box3).getPropertyValue("transform")||"initial";
-//     box4.style.transform = window.getComputedStyle(box4).getPropertyValue("transform")||"initial";
-// }
+const pauseDial = () => { //this part still not working - able to pause but not start again. 
+    box1.style.transform = window.getComputedStyle(box1).getPropertyValue("transform")||"initial";
+    box2.style.transform = window.getComputedStyle(box2).getPropertyValue("transform")||"initial";
+    box3.style.transform = window.getComputedStyle(box3).getPropertyValue("transform")||"initial";
+    box4.style.transform = window.getComputedStyle(box4).getPropertyValue("transform")||"initial";
+}
 
 const playDial = () => {
-    let rotation = Math.floor(360 - ((time / startingMins * 30) * 180))
-    box1.style.transition = `transform 1s linear`
-    box1.style.transform = `rotate(${Math.min(rotation, 180)}deg)`
-    // box2.style.transition = `transform ${(startingMins * 60) * 0.75}s linear ${(startingMins * 60) * 0.25}s`
-    // box2.style.transform = 'rotate(270deg)';
-    // box3.style.transition = `transform ${(startingMins * 60) * 0.5}s linear ${(startingMins * 60) * 0.5}s`
-    // box3.style.transform = 'rotate(180deg)';
-    // box4.style.transition = `transform ${(startingMins * 60) * 0.25}s linear ${(startingMins * 60) * 0.75}s`
-    // box4.style.transform = 'rotate(90deg)';
+    box1.style.transition = `transform ${startingMins * 60}s linear`
+    box1.style.transform = 'rotate(360deg)';
+    box2.style.transition = `transform ${(startingMins * 60) * 0.75}s linear ${(startingMins * 60) * 0.25}s`
+    box2.style.transform = 'rotate(270deg)';
+    box3.style.transition = `transform ${(startingMins * 60) * 0.5}s linear ${(startingMins * 60) * 0.5}s`
+    box3.style.transform = 'rotate(180deg)';
+    box4.style.transition = `transform ${(startingMins * 60) * 0.25}s linear ${(startingMins * 60) * 0.75}s`
+    box4.style.transform = 'rotate(90deg)';
 }
 
 function cancelTimer() {
