@@ -81,6 +81,7 @@ span {
     width: 15rem;
     height: 15rem;
     z-index: 1;
+    background-color:rgb(249, 64, 32);
 }
 .box1 {
     right: 0;
@@ -120,8 +121,6 @@ span {
 .rotate4 {
     transform: rotate(90deg);
 }
-
-
 
 #inner-circle {
     position: absolute;
