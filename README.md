@@ -26,6 +26,6 @@ This exercise was very challenging 🤯 and forced me to think through the logic
 - ~~Code is not dry - need to find a way to combine the two timers into the same functions.~~
 - ~~Configure the setInterval method to first execute immediately and then execute with the timer.~~
 - ~~Add a dial animation.~~
-- Animation is able to start and pause but not restart from where it stopped.
+- Animation is able to start and pause but not restart from where it paused.
 
 
